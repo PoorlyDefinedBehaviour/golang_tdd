@@ -13,6 +13,7 @@ func Test_Add(t *testing.T) {
 	assert.Equal(t, 4, Add(2, 2))
 }
 
+// This appears in the documentation if we use godoc
 func ExampleAdd() {
 	fmt.Println(Add(1, 5))
 	// Output: 6
