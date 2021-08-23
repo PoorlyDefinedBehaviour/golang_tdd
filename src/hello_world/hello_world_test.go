@@ -9,28 +9,21 @@ import (
 func TestHello(t *testing.T) {
 	t.Parallel()
 
-	tests := []struct {
-		message  string
-		name     string
-		expected string
-	}{
-		{
-			message:  "says hello to the name passed in ",
-			name:     "John",
-			expected: "Hello, John",
-		},
-		{
-			message:  "returns the default message if name is empty",
-			name:     "",
-			expected: "Hello, worl1d",
-		},
-	}
+	t.Run("says hello to the name passed in", func(t *testing.T) {
+		t.Parallel()
 
-	for _, tt := range tests {
-		t.Log(tt.message)
+		assert.Equal(t, "Hello, John", Hello("John", Languages.English))
+	})
 
-		actual := Hello(tt.name)
+	t.Run("returns a default message if name is empty", func(t *testing.T) {
+		t.Parallel()
 
-		assert.Equal(t, tt.expected, actual)
-	}
+		assert.Equal(t, "Hello, world", Hello("", Languages.English))
+	})
+
+	t.Run("in spanish", func(t *testing.T) {
+		t.Parallel()
+
+		assert.Equal(t, "Hola, John", Hello("John", Languages.Spanish))
+	})
 }
