@@ -3,33 +3,27 @@ package helloworld
 import "fmt"
 
 type Language struct {
-	language string
+	value string
 }
 
 var Languages = struct {
 	English Language
 	Spanish Language
+	French  Language
 }{
-	English: Language{language: "english"},
-	Spanish: Language{language: "spanish"},
+	English: Language{value: "english"},
+	Spanish: Language{value: "spanish"},
+	French:  Language{value: "french"},
 }
 
 var greetings = map[Language]string{
 	Languages.English: "Hello",
 	Languages.Spanish: "Hola",
-}
-
-func greetingByLanguage(language Language) string {
-	greeting, ok := greetings[language]
-	if !ok {
-		return greetings[Languages.English]
-	}
-
-	return greeting
+	Languages.French:  "Bonjour",
 }
 
 func Hello(name string, language Language) string {
-	greeting := greetingByLanguage(language)
+	greeting := greetings[language]
 
 	if name == "" {
 		return fmt.Sprintf("%s, world", greeting)

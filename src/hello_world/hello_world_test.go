@@ -26,4 +26,10 @@ func TestHello(t *testing.T) {
 
 		assert.Equal(t, "Hola, John", Hello("John", Languages.Spanish))
 	})
+
+	t.Run("in french", func(t *testing.T) {
+		t.Parallel()
+
+		assert.Equal(t, "Bonjour, John", Hello("John", Languages.French))
+	})
 }
