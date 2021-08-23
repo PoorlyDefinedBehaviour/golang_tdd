@@ -29,3 +29,11 @@ func Test_CircleArea(t *testing.T) {
 
 	assert.Equal(t, 314.1592653589793, circle.Area())
 }
+
+func Test_TriangleArea(t *testing.T) {
+	t.Parallel()
+
+	triangle := Triangle{Base: 12, Height: 6}
+
+	assert.Equal(t, 36.0, triangle.Area())
+}
