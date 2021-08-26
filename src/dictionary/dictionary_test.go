@@ -9,13 +9,13 @@ import (
 func Test_Search(t *testing.T) {
 	t.Parallel()
 
-	dict := map[string]string{
+	dict := T{
 		"a": "b",
 	}
 
 	expected := "b"
 
-	actual := Search(dict, "a")
+	actual := dict.Search("a")
 
 	assert.Equal(t, expected, actual)
 }
