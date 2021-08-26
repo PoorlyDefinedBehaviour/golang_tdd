@@ -1,9 +1,17 @@
 package amount
 
-import "github.com/pkg/errors"
+import (
+	"fmt"
+
+	"github.com/pkg/errors"
+)
 
 type T struct {
 	value int
+}
+
+func (amount *T) String() string {
+	return fmt.Sprintf("Amount(%d)", amount.value)
 }
 
 var ErrInvalidAmount = errors.New("invalid amount")

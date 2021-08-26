@@ -82,3 +82,15 @@ func Test_Int(t *testing.T) {
 
 	assert.Equal(t, 3, Int(amount))
 }
+
+func TestT_String(t *testing.T) {
+	t.Parallel()
+
+	amount, err := New(5)
+
+	assert.Nil(t, err)
+
+	expected := "Amount(5)"
+
+	assert.Equal(t, expected, amount.String())
+}
