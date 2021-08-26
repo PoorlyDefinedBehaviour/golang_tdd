@@ -4,6 +4,7 @@ import (
 	"golang_tdd/src/wallet/amount"
 	"testing"
 
+	"github.com/pkg/errors"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -24,27 +25,47 @@ func Test_Deposit(t *testing.T) {
 }
 
 func Test_Withdraw(t *testing.T) {
-	wallet := New()
+	t.Parallel()
 
-	initialValue, err := amount.New(10)
+	t.Run("withdrawing", func(t *testing.T) {
+		t.Parallel()
 
-	assert.Nil(t, err)
+		wallet := New()
 
-	wallet.Deposit(initialValue)
+		initialValue, err := amount.New(10)
 
-	amountToWithdraw, err := amount.New(5)
+		assert.Nil(t, err)
 
-	assert.Nil(t, err)
+		wallet.Deposit(initialValue)
 
-	expected, err := amount.New(5)
+		amountToWithdraw, err := amount.New(5)
 
-	assert.Nil(t, err)
+		assert.Nil(t, err)
 
-	err = wallet.Withdraw(amountToWithdraw)
+		expected, err := amount.New(5)
 
-	assert.Nil(t, err)
+		assert.Nil(t, err)
 
-	actual := wallet.Balance()
+		err = wallet.Withdraw(amountToWithdraw)
 
-	assert.Equal(t, expected, actual)
+		assert.Nil(t, err)
+
+		actual := wallet.Balance()
+
+		assert.Equal(t, expected, actual)
+	})
+
+	t.Run("can't withdraw more than the current balance", func(t *testing.T) {
+		t.Parallel()
+
+		wallet := New()
+
+		amountToWithdraw, err := amount.New(1)
+
+		assert.Nil(t, err)
+
+		err = wallet.Withdraw(amountToWithdraw)
+
+		assert.True(t, errors.Is(err, ErrInsufficientFunds))
+	})
 }
