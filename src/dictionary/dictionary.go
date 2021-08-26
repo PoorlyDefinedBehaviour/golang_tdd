@@ -2,12 +2,16 @@ package dictionary
 
 type T map[string]string
 
-func (dict *T) Search(word string) string {
-	return (*dict)[word]
+func (dict *T) Search(key string) string {
+	return (*dict)[key]
 }
 
-func (dict *T) Contains(word string) bool {
-	_, ok := (*dict)[word]
+func (dict *T) Contains(key string) bool {
+	_, ok := (*dict)[key]
 
 	return ok
+}
+
+func (dict *T) Remove(key string) {
+	delete(*dict, key)
 }

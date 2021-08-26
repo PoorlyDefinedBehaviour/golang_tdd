@@ -56,3 +56,28 @@ func Test_Contains(t *testing.T) {
 	}
 
 }
+
+func Test_Remove(t *testing.T) {
+	tests := []struct {
+		dict     T
+		key      string
+		expected T
+	}{
+		{
+			dict:     T{},
+			key:      "any",
+			expected: T{},
+		},
+		{
+			dict:     T{"a": "1", "b": "2"},
+			key:      "b",
+			expected: T{"a": "1"},
+		},
+	}
+
+	for _, tt := range tests {
+		tt.dict.Remove(tt.key)
+
+		assert.Equal(t, tt.expected, tt.dict)
+	}
+}
