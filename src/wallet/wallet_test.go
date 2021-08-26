@@ -10,11 +10,15 @@ import (
 func Test_Deposit(t *testing.T) {
 	wallet := New()
 
-	amount, err := amount.New(10)
+	deposit, err := amount.New(10)
 
 	assert.Nil(t, err)
 
-	wallet.Deposit(amount)
+	expected, err := amount.New(10)
 
-	assert.Equal(t, 10, wallet.Balance())
+	assert.Nil(t, err)
+
+	wallet.Deposit(deposit)
+
+	assert.Equal(t, expected, wallet.Balance())
 }

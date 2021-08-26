@@ -15,7 +15,10 @@ type T struct {
 }
 
 func New() T {
-	value, _ := amount.New(0)
+	value, err := amount.New(0)
+	if err != nil {
+		panic(err)
+	}
 
 	return T{
 		balance: balance{
@@ -32,9 +35,9 @@ func (wallet *T) Deposit(value amount.T) {
 	wallet.balance.value = amount.Add(wallet.balance.value, value)
 }
 
-func (wallet *T) Balance() int {
+func (wallet *T) Balance() amount.T {
 	wallet.balance.lock.RLock()
 	defer wallet.balance.lock.RUnlock()
 
-	return amount.Int(wallet.balance.value)
+	return wallet.balance.value
 }
