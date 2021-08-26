@@ -94,3 +94,17 @@ func TestT_String(t *testing.T) {
 
 	assert.Equal(t, expected, amount.String())
 }
+
+func TestSub(t *testing.T) {
+	t.Parallel()
+
+	a, _ := New(10)
+
+	b, _ := New(5)
+
+	expected, _ := New(5)
+
+	actual := Sub(a, b)
+
+	assert.Equal(t, expected, actual)
+}

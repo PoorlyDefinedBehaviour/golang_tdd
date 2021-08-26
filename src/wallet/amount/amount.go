@@ -32,6 +32,14 @@ func New(value int) (T, error) {
 
 func Add(a, b T) T {
 	result, _ := New(a.value + b.value)
+
+	return result
+}
+
+func Sub(a, b T) T {
+	fmt.Printf("\n\naaaaaaa a %+v\n\n", a)
+	fmt.Printf("\n\naaaaaaa b %+v\n\n", b)
+	result, _ := New(a.value - b.value)
 	if Int(result) < 0 {
 		panic(errors.WithStack(ErrInvalidAmount))
 	}
