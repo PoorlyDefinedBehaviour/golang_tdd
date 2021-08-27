@@ -2,26 +2,26 @@ package counter
 
 import "sync"
 
-type Counter struct {
+type T struct {
 	value int
 	mutex sync.RWMutex
 }
 
-func New(initialValue int) *Counter {
-	return &Counter{
+func New(initialValue int) *T {
+	return &T{
 		value: initialValue,
 		mutex: sync.RWMutex{},
 	}
 }
 
-func (counter *Counter) Increment() {
+func (counter *T) Increment() {
 	counter.mutex.Lock()
 	defer counter.mutex.Unlock()
 
 	counter.value++
 }
 
-func (counter *Counter) Value() int {
+func (counter *T) Value() int {
 	counter.mutex.RLock()
 	defer counter.mutex.RUnlock()
 
