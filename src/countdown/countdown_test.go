@@ -7,14 +7,6 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-type SleeperSpy struct {
-	Calls int
-}
-
-func (sleeper *SleeperSpy) Sleep() {
-	sleeper.Calls++
-}
-
 type CountdownOperationsSpy struct {
 	Calls []string
 }
@@ -41,14 +33,13 @@ func TestCount(t *testing.T) {
 
 		buffer := bytes.Buffer{}
 
-		sleeperSpy := SleeperSpy{}
+		spy := CountdownOperationsSpy{}
 
-		Count(&buffer, &sleeperSpy)
+		Count(&buffer, &spy)
 
 		expected := "3\n2\n1\nGo!"
 
 		assert.Equal(t, expected, buffer.String())
-		assert.Equal(t, 4, sleeperSpy.Calls)
 	})
 
 	t.Run("sleeps before every print", func(t *testing.T) {
