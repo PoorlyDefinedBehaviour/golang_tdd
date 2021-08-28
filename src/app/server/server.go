@@ -7,7 +7,7 @@ import (
 )
 
 type PlayerStore interface {
-	GetPlayerScore(id string) int
+	GetPlayerScore(id string) (int, bool)
 }
 
 type PlayerServer struct {
@@ -18,5 +18,11 @@ func (server *PlayerServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	playerID := strings.TrimPrefix(r.URL.Path, "players/")
 	playerID = strings.TrimSuffix(playerID, "/score")
 
-	fmt.Fprint(w, server.store.GetPlayerScore(playerID))
+	score, found := server.store.GetPlayerScore(playerID)
+	if !found {
+		w.WriteHeader(http.StatusNotFound)
+		return
+	}
+
+	fmt.Fprint(w, score)
 }

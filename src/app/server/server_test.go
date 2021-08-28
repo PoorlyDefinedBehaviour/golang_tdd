@@ -12,8 +12,9 @@ type PlayerStoreStub struct {
 	scores map[string]int
 }
 
-func (store *PlayerStoreStub) GetPlayerScore(id string) int {
-	return store.scores[id]
+func (store *PlayerStoreStub) GetPlayerScore(id string) (int, bool) {
+	score, found := store.scores[id]
+	return score, found
 }
 
 func TestGetPlayerScore(t *testing.T) {
@@ -38,6 +39,7 @@ func TestGetPlayerScore(t *testing.T) {
 		server.ServeHTTP(response, request)
 
 		assert.Equal(t, "10", response.Body.String())
+		assert.Equal(t, http.StatusOK, response.Code)
 	})
 
 	t.Run("returns player 2 score", func(t *testing.T) {
@@ -50,5 +52,18 @@ func TestGetPlayerScore(t *testing.T) {
 		server.ServeHTTP(response, request)
 
 		assert.Equal(t, "20", response.Body.String())
+		assert.Equal(t, http.StatusOK, response.Code)
+	})
+
+	t.Run("returns 404 on missing players", func(t *testing.T) {
+		t.Parallel()
+
+		request, _ := http.NewRequest(http.MethodGet, "players/9999999/score", nil)
+
+		response := httptest.NewRecorder()
+
+		server.ServeHTTP(response, request)
+
+		assert.Equal(t, http.StatusNotFound, response.Code)
 	})
 }
