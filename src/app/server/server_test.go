@@ -11,11 +11,27 @@ import (
 func TestGetPlayerScore(t *testing.T) {
 	t.Parallel()
 
-	request, _ := http.NewRequest(http.MethodGet, "players/1/score", nil)
+	t.Run("returns player 1 score", func(t *testing.T) {
+		t.Parallel()
 
-	response := httptest.NewRecorder()
+		request, _ := http.NewRequest(http.MethodGet, "players/1/score", nil)
 
-	PlayerServer(response, request)
+		response := httptest.NewRecorder()
 
-	assert.Equal(t, "20", response.Body.String())
+		PlayerServer(response, request)
+
+		assert.Equal(t, "10", response.Body.String())
+	})
+
+	t.Run("returns player 2 score", func(t *testing.T) {
+		t.Parallel()
+
+		request, _ := http.NewRequest(http.MethodGet, "players/2/score", nil)
+
+		response := httptest.NewRecorder()
+
+		PlayerServer(response, request)
+
+		assert.Equal(t, "20", response.Body.String())
+	})
 }
