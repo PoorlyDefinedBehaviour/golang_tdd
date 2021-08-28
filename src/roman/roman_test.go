@@ -9,5 +9,15 @@ import (
 func TestFromArabic(t *testing.T) {
 	t.Parallel()
 
-	assert.Equal(t, "I", FromArabic(1))
+	tests := []struct {
+		n        int
+		expected string
+	}{
+		{n: 1,
+			expected: "I"},
+	}
+
+	for _, tt := range tests {
+		assert.Equal(t, tt.expected, FromArabic(tt.n))
+	}
 }
