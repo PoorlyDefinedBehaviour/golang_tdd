@@ -9,12 +9,17 @@ import (
 )
 
 type PlayerStoreStub struct {
-	scores map[string]int
+	scores   map[string]int
+	winCalls []string
 }
 
 func (store *PlayerStoreStub) GetPlayerScore(id string) (int, bool) {
 	score, found := store.scores[id]
 	return score, found
+}
+
+func (store *PlayerStoreStub) RecordWin(id string) {
+	store.winCalls = append(store.winCalls, id)
 }
 
 func TestGetPlayerScore(t *testing.T) {
@@ -71,13 +76,16 @@ func TestGetPlayerScore(t *testing.T) {
 func TestStorePlayerWins(t *testing.T) {
 	t.Parallel()
 
-	server := PlayerServer{
-		store: &PlayerStoreStub{
-			scores: map[string]int{},
-		},
+	store := PlayerStoreStub{
+		scores:   make(map[string]int),
+		winCalls: make([]string, 0),
 	}
 
-	t.Run("returns accepted on POST", func(t *testing.T) {
+	server := PlayerServer{
+		store: &store,
+	}
+
+	t.Run("records player wins", func(t *testing.T) {
 		t.Parallel()
 
 		request, _ := http.NewRequest(http.MethodPost, "players/1/score", nil)
@@ -85,6 +93,8 @@ func TestStorePlayerWins(t *testing.T) {
 		response := httptest.NewRecorder()
 
 		server.ServeHTTP(response, request)
+
+		assert.Equal(t, []string{"1"}, store.winCalls)
 
 		assert.Equal(t, http.StatusAccepted, response.Code)
 	})
