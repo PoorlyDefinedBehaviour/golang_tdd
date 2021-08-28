@@ -67,3 +67,25 @@ func TestGetPlayerScore(t *testing.T) {
 		assert.Equal(t, http.StatusNotFound, response.Code)
 	})
 }
+
+func TestStorePlayerWins(t *testing.T) {
+	t.Parallel()
+
+	server := PlayerServer{
+		store: &PlayerStoreStub{
+			scores: map[string]int{},
+		},
+	}
+
+	t.Run("returns accepted on POST", func(t *testing.T) {
+		t.Parallel()
+
+		request, _ := http.NewRequest(http.MethodPost, "players/1/score", nil)
+
+		response := httptest.NewRecorder()
+
+		server.ServeHTTP(response, request)
+
+		assert.Equal(t, http.StatusAccepted, response.Code)
+	})
+}

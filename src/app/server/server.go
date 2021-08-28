@@ -15,6 +15,15 @@ type PlayerServer struct {
 }
 
 func (server *PlayerServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	switch r.Method {
+	case http.MethodPost:
+		server.processPlayerWin(w, r)
+	case http.MethodGet:
+		server.getPlayerScore(w, r)
+	}
+}
+
+func (server *PlayerServer) getPlayerScore(w http.ResponseWriter, r *http.Request) {
 	playerID := strings.TrimPrefix(r.URL.Path, "players/")
 	playerID = strings.TrimSuffix(playerID, "/score")
 
@@ -25,4 +34,9 @@ func (server *PlayerServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 
 	fmt.Fprint(w, score)
+}
+
+func (server *PlayerServer) processPlayerWin(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusAccepted)
+	return
 }
