@@ -6,17 +6,17 @@ import (
 	"strings"
 )
 
-func PlayerServer(w http.ResponseWriter, r *http.Request) {
+type PlayerStore interface {
+	GetPlayerScore(id string) int
+}
+
+type PlayerServer struct {
+	store PlayerStore
+}
+
+func (server *PlayerServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	playerID := strings.TrimPrefix(r.URL.Path, "players/")
 	playerID = strings.TrimSuffix(playerID, "/score")
 
-	if playerID == "1" {
-		fmt.Fprint(w, "10")
-		return
-	}
-
-	if playerID == "2" {
-		fmt.Fprint(w, "20")
-		return
-	}
+	fmt.Fprint(w, server.store.GetPlayerScore(playerID))
 }

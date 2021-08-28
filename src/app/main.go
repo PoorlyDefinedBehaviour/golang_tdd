@@ -1,13 +1,14 @@
 package main
 
 import (
-	"golang_tdd/src/app/server"
 	"log"
 	"net/http"
+
+	"golang_tdd/src/app/server"
 )
 
 func main() {
-	handler := http.HandlerFunc(server.PlayerServer)
+	server := server.PlayerServer{}
 	log.Println("starting server")
-	log.Fatal(http.ListenAndServe(":5000", handler))
+	log.Fatal(http.ListenAndServe(":5000", &server))
 }
