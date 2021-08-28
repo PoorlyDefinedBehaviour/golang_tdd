@@ -6,6 +6,31 @@ import (
 	"strings"
 )
 
+type InMemoryStore struct {
+	// NOTE: not concurrency safe
+	store map[string]int
+}
+
+func NewInMemoryStore() *InMemoryStore {
+	return &InMemoryStore{
+		store: make(map[string]int),
+	}
+}
+
+func (store *InMemoryStore) GetPlayerScore(id string) (int, bool) {
+	score, found := store.store[id]
+	return score, found
+}
+
+func (store *InMemoryStore) RecordWin(id string) {
+	score, ok := store.store[id]
+	if !ok {
+		store.store[id] = 1
+	} else {
+		store.store[id] = score + 1
+	}
+}
+
 type PlayerStore interface {
 	GetPlayerScore(id string) (int, bool)
 	RecordWin(id string)
@@ -13,6 +38,16 @@ type PlayerStore interface {
 
 type PlayerServer struct {
 	store PlayerStore
+}
+
+type Dependencies struct {
+	Store PlayerStore
+}
+
+func NewPlayerServer(deps Dependencies) *PlayerServer {
+	return &PlayerServer{
+		store: deps.Store,
+	}
 }
 
 func (server *PlayerServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
