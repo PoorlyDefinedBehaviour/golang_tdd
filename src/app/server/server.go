@@ -4,25 +4,33 @@ import (
 	"fmt"
 	"net/http"
 	"strings"
+	"sync"
 )
 
 type InMemoryStore struct {
-	// NOTE: not concurrency safe
 	store map[string]int
+	mutex sync.RWMutex
 }
 
 func NewInMemoryStore() *InMemoryStore {
 	return &InMemoryStore{
 		store: make(map[string]int),
+		mutex: sync.RWMutex{},
 	}
 }
 
 func (store *InMemoryStore) GetPlayerScore(id string) (int, bool) {
+	store.mutex.RLock()
+	defer store.mutex.RUnlock()
+
 	score, found := store.store[id]
 	return score, found
 }
 
 func (store *InMemoryStore) RecordWin(id string) {
+	store.mutex.Lock()
+	defer store.mutex.Unlock()
+
 	score, ok := store.store[id]
 	if !ok {
 		store.store[id] = 1
